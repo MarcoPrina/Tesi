@@ -1,3 +1,4 @@
 # Project exclude paths
 /venv/
 /YoutubeAPI/client_secret.json
+/Outputs/

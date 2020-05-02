@@ -12,7 +12,7 @@ if __name__ == '__main__':
 
     Path("Outputs").mkdir(parents=True, exist_ok=True)
 
-    videoID = ''  # "244fChGNSkg"
+    videoID = "244fChGNSkg"
     captionFileName = 'Outputs/caption.txt'
     posTag = ['S', 'N', 'A']
 

@@ -1,4 +1,11 @@
-Per poter usare Tint è necessario avere installato java
+Installare tutte le dipendenze:
+pip install -r requirements.txt
+Se da come errore 'Error: pg_config executable not found.' allora bisogna:
+sudo apt-get install libpq-dev
+pip install psycopg2
+
+Per poter usare Tint è necessario avere installato java:
+apt-get install default-jdk
 
 La prima volta di ogni sessione il programma farà partire il server Tint su 'http://localhost:8012/tint', per questo la
 prima volta si vedono molti più log

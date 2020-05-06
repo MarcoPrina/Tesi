@@ -30,10 +30,10 @@ class BreakAnalyzer():
         self.orderedBreaks = sorted(breaks, key=lambda x: x['break'], reverse=True)
         return self.orderedBreaks
 
-    def generateFile(self, fileName='breaks'):
-        if os.path.exists("Outputs/" + fileName + ".csv"):
-            os.remove("Outputs/" + fileName + ".csv")
-        breaksFile = open("Outputs/" + fileName + ".csv", "a")
+    def generateFile(self, directoryName: str, fileName='breaks'):
+        if os.path.exists('Outputs/' + directoryName + "/" + fileName + ".csv"):
+            os.remove('Outputs/' + directoryName + "/" + fileName + ".csv")
+        breaksFile = open('Outputs/' + directoryName + "/" + fileName + ".csv", "a")
 
         breaksFile.write('durata' + ';' + 'inizio' + '\r\n')
 

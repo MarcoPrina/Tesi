@@ -56,10 +56,10 @@ class Tokenize():
             subprocess.Popen(["./tint/tint-server.sh", "-c", "./tint/sampleProps.properties"])
             time.sleep(7)
 
-    def generateFile(self, fileName='token'):
-        if os.path.exists("Outputs/" + fileName +".csv"):
-            os.remove("Outputs/" + fileName +".csv")
-        tokenFile = open("Outputs/" + fileName +".csv", "a")
+    def generateFile(self, directoryName: str, fileName='token'):
+        if os.path.exists('Outputs/' + directoryName + "/" + fileName +".csv"):
+            os.remove('Outputs/' + directoryName + "/" + fileName +".csv")
+        tokenFile = open('Outputs/' + directoryName + "/" + fileName +".csv", "a")
         for sentence in self.sentencesWithToken['sentences']:
             for token in sentence['tokens']:
                 tokenFile.write(token['word'] + ';' + token['time'] + ';' + token['pos'] + '\r\n')

@@ -24,10 +24,10 @@ class Prioritize():
         self.ordered = sorted(words.items(), key=lambda x: x[1]['counter'], reverse=True)
         return self.ordered
 
-    def generateFile(self, fileName='words'):
-        if os.path.exists("Outputs/" + fileName + ".csv"):
-            os.remove("Outputs/" + fileName + ".csv")
-        wordsFile = open("Outputs/" + fileName + ".csv", "a")
+    def generateFile(self, directoryName: str, fileName='words'):
+        if os.path.exists('Outputs/' + directoryName + "/" + fileName + ".csv"):
+            os.remove('Outputs/' + directoryName + "/" + fileName + ".csv")
+        wordsFile = open('Outputs/' + directoryName + "/" + fileName + ".csv", "a")
 
         for word, data in self.ordered:
             ordered = sorted(data['pos'].items(), key=lambda x: x[1], reverse=True)

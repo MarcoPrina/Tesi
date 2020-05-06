@@ -48,10 +48,10 @@ class FindBinomi():
         self.binomi = sorted(buffBinomi.items(), key=lambda x: x[1], reverse=True)
         return self.binomi
 
-    def generateFile(self, fileName='binomi'):
-        if os.path.exists("Outputs/" + fileName + ".csv"):
-            os.remove("Outputs/" + fileName + ".csv")
-        binomiFile = open("Outputs/" + fileName + ".csv", "a")
+    def generateFile(self, directoryName: str, fileName='binomi'):
+        if os.path.exists('Outputs/' + directoryName + "/" + fileName + ".csv"):
+            os.remove('Outputs/' + directoryName + "/" + fileName + ".csv")
+        binomiFile = open('Outputs/' + directoryName + "/" + fileName + ".csv", "a")
 
         for binomio, count in self.binomi:
             binomiFile.write(binomio + ';' + str(count) + '\r\n')

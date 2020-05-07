@@ -6,7 +6,7 @@ class CropCaption():
         self.caption = ''
 
     def getUsableCaption(self) -> str:
-        with open('Outputs/' + self.directoryName + self.captionFileName) as f:
+        with open('Outputs/' + self.directoryName + '/' + self.captionFileName) as f:
             temp_final = f.read().replace('\n', "\r\n").replace('"', "'")
 
             self.caption = self.remove_duplicate_lines(temp_final)

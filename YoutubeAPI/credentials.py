@@ -8,7 +8,7 @@ import requests
 
 class YoutubeCredentials():
 
-    def __init__(self, client_secrets_file: str) -> None:
+    def __init__(self, client_secrets_file: str):
         self.client_secrets_file = client_secrets_file
         with open(client_secrets_file) as f:
             self.clientSecret = json.load(f)['installed']

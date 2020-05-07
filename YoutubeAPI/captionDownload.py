@@ -36,7 +36,7 @@ class CaptionDownload():
             tfmt="vtt"
         )
 
-        fh = io.FileIO('Outputs/' + directoryName + output_file, "wb")
+        fh = io.FileIO('Outputs/' + directoryName + '/' + output_file, "wb")
 
         download = MediaIoBaseDownload(fh, request)
         complete = False

@@ -17,10 +17,9 @@ class ParseVideo():
         Path('Outputs/' + self.directoryName).mkdir(parents=True, exist_ok=True)
 
     def getCaptionFromID(self, videoID:str, client_secretPATH: str):
-        youtubeCredentials = YoutubeCredentials(client_secretPATH)
-        credentials = youtubeCredentials.get()
-        captionDownload = CaptionDownload(credentials)
-        captionDownload.get(videoID, self.directoryName)
+        credentials = YoutubeCredentials(client_secretPATH).get()
+
+        CaptionDownload(credentials).get(videoID, self.directoryName)
 
         cropCaption = CropCaption(self.directoryName)
         cropCaption.generateFile()

@@ -3,6 +3,8 @@ import os
 import re
 import subprocess
 
+from tqdm import tqdm
+
 import time
 
 import requests
@@ -18,21 +20,23 @@ class Tokenize():
         self.startTint()
         file = self.usableCaption.split('\r')
         tokenized = { "sentences": []}
-        for index, line in enumerate(file):
-            if line:
-                sentence = self.posLine(line)["sentences"][0]
-                sentence['index'] = index
-                remainingLine = line
-                time = ''
-                for token in sentence["tokens"]:
-                    word = token['word']
-                    lineParts = remainingLine.split(word, 1)
-                    if len(lineParts)>1 and lineParts[1]:
-                        remainingLine = remainingLine.split(word, 1)[1].strip()
-                        if '<' in remainingLine:
-                            time = remainingLine[remainingLine.find('<')+1:].split('>', 1)[0]
-                    token['time'] = time
-                tokenized["sentences"].append(sentence)
+        with tqdm(total=len(file)) as pbar:
+            for index, line in enumerate(file):
+                pbar.update(1)
+                if line:
+                    sentence = self.posLine(line)["sentences"][0]
+                    sentence['index'] = index
+                    remainingLine = line
+                    time = ''
+                    for token in sentence["tokens"]:
+                        word = token['word']
+                        lineParts = remainingLine.split(word, 1)
+                        if len(lineParts)>1 and lineParts[1]:
+                            remainingLine = remainingLine.split(word, 1)[1].strip()
+                            if '<' in remainingLine:
+                                time = remainingLine[remainingLine.find('<')+1:].split('>', 1)[0]
+                        token['time'] = time
+                    tokenized["sentences"].append(sentence)
 
         self.sentencesWithToken = tokenized
         return tokenized

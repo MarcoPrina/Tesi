@@ -23,7 +23,8 @@ if __name__ == '__main__':
             parseVideo.getCaptionFromID(video['videoId'], client_secretPATH).parse(posTag)
             print('Elaborata lezione ', str(video['lesson']))
 
-    aggregateVideos = AggregateVideos().genereteCommonWords()
+    AggregateVideos().genereteCommonWords()
+    AggregateVideos().genereteCommonBinomi()
 
 
 """

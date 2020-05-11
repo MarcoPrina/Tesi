@@ -1,15 +1,19 @@
 import os
 from collections import defaultdict
+from pathlib import Path
 
 
 class AggregateVideos():
 
+    def __init__(self) -> None:
+        Path("Outputs/totalVideo").mkdir(parents=True, exist_ok=True)
+
     def genereteTotalTokens(self):
         lessons = os.listdir('Outputs')
 
-        if os.path.exists('totalToken.csv'):
-            os.remove('totalToken.csv')
-        totalToken = open('totalToken.csv', 'a')
+        if os.path.exists('Outputs/totalVideo/totalToken.csv'):
+            os.remove('Outputs/totalVideo/totalToken.csv')
+        totalToken = open('Outputs/totalVideo/totalToken.csv', 'a')
 
         for lesson in lessons:
             with open('Outputs/' + lesson + '/token.csv') as f:
@@ -21,17 +25,34 @@ class AggregateVideos():
     def genereteCommonWords(self):
         lessons = os.listdir('Outputs')
 
-        if os.path.exists('commonWords.csv'):
-            os.remove('commonWords.csv')
-        commonWordsFile = open('commonWords.csv', 'a')
-        commonWords = defaultdict(int)
+        commonWords = {}
 
         for lesson in lessons:
-            with open('Outputs/' + lesson + '/words.csv') as f:
-                words = [line.split(';')[0] for line in f]
-                for word in words:
-                    commonWords[word] += 1
+            if self.isALesson(lesson):
+                with open('Outputs/' + lesson + '/words.csv') as f:
+                    words = [line.split(';') for line in f]
+                    for word in words:
+                        if word[0] in commonWords:
+                            commonWords[word[0]]['totCount'] += int(word[1])
+                            commonWords[word[0]]['lessons'] += 1
+                        else:
+                            commonWords[word[0]] = {'word': word[0], 'totCount': int(word[1]), 'lessons': 1}
 
-        ordered = sorted(commonWords.items(), key=lambda x: x[1], reverse=True)
-        for word in ordered:
-            commonWordsFile.write(word[0] + ';' + str(word[1]) + '\r\n')
+        ordered = sorted(commonWords.items(), key=lambda x: (x[1]['lessons'], x[1]['totCount']), reverse=True)
+        self.generateWordsFile(ordered)
+        return ordered
+
+    def generateWordsFile(self, words):
+        if os.path.exists('Outputs/totalVideo/commonWords.csv'):
+            os.remove('Outputs/totalVideo/commonWords.csv')
+        commonWordsFile = open('Outputs/totalVideo/commonWords.csv', 'a')
+        commonWordsFile.write('word' + ';' + 'in lessons' + ';' + 'tot count' + '\r\n')
+        for word in words:
+            commonWordsFile.write(word[1]['word'] + ';' + str(word[1]['lessons']) + ';' + str(word[1]['totCount']) + '\r\n')
+
+    def isALesson(self, lesson):
+        try:
+            int(lesson)
+            return True
+        except ValueError:
+            return False

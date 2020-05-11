@@ -8,7 +8,7 @@ from parseVideo import ParseVideo
 
 if __name__ == '__main__':
 
-    playlistID = 'PLdrYmPSKBRMzHYgtsF0efrW5dtfvg7uwM'
+    playlistID = ''  # 'PLdrYmPSKBRMwcxumBOfPci1hFBg7Q_Nnw'  # 'PLdrYmPSKBRMzHYgtsF0efrW5dtfvg7uwM'
     posTag = ['S', 'N', 'A']
     client_secretPATH = 'YoutubeAPI/client_secret.json'
 
@@ -24,6 +24,7 @@ if __name__ == '__main__':
             print('Elaborata lezione ', str(video['lesson']))
 
     aggregateVideos = AggregateVideos().genereteCommonWords()
+
 
 """
     videoID = "THNwJlawXic"

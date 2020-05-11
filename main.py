@@ -1,24 +1,29 @@
+import os
 from pathlib import Path
 
+from AggregateData.aggregateVideos import AggregateVideos
 from YoutubeAPI.credentials import YoutubeCredentials
 from YoutubeAPI.playlistData import PlaylistData
 from parseVideo import ParseVideo
 
 if __name__ == '__main__':
 
-    playlistID = 'PLdrYmPSKBRMwcxumBOfPci1hFBg7Q_Nnw'
+    playlistID = 'PLdrYmPSKBRMzHYgtsF0efrW5dtfvg7uwM'
     posTag = ['S', 'N', 'A']
     client_secretPATH = 'YoutubeAPI/client_secret.json'
 
     Path("Outputs").mkdir(parents=True, exist_ok=True)
 
-    credential = YoutubeCredentials(client_secretPATH).get()
-    playlist = PlaylistData(credential).get(playlistID).askLessons().playlist
+    if playlistID:
+        credential = YoutubeCredentials(client_secretPATH).get()
+        playlist = PlaylistData(credential).get(playlistID).askLessons().playlist
 
-    for video in playlist:
-        parseVideo = ParseVideo(str(video['lesson']))
-        parseVideo.getCaptionFromID(video['videoId'], client_secretPATH).parse(posTag)
-        print('Elaborata lezione ', str(video['lesson']))
+        for video in playlist:
+            parseVideo = ParseVideo(str(video['lesson']))
+            parseVideo.getCaptionFromID(video['videoId'], client_secretPATH).parse(posTag)
+            print('Elaborata lezione ', str(video['lesson']))
+
+    aggregateVideos = AggregateVideos().genereteCommonWords()
 
 """
     videoID = "THNwJlawXic"

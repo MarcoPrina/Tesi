@@ -5,6 +5,8 @@ import google
 import google_auth_oauthlib
 import requests
 
+scopes = ["https://www.googleapis.com/auth/youtube.force-ssl"]
+
 
 class YoutubeCredentials():
 

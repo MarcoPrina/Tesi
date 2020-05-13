@@ -20,6 +20,7 @@ class FindBinomi():
                     first = False
                     pre = token
                 elif token['pos'].startswith(tuple(posTag)):
+                    #  buffBinomi[pre['word'] + ' ' + token['word']] += 1 TODO: trovare modo migliore per gestire i binomi, magari con un bel dict
                     buffBinomi[pre['word'] + ';' + pre['pos'] + ';' + token['word'] + ';' + token['pos']] += 1
                     pre = token
         self.binomi = sorted(buffBinomi.items(), key=lambda x: x[1], reverse=True)

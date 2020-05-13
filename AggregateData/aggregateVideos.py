@@ -1,5 +1,4 @@
 import os
-from collections import defaultdict
 from pathlib import Path
 
 
@@ -35,11 +34,11 @@ class AggregateVideos():
                     for word in words:
                         if word[0] in commonWords:
                             commonWords[word[0]]['totCount'] += int(word[1])
-                            commonWords[word[0]]['lessons'] += 1
+                            commonWords[word[0]]['lessons'].append(lesson)
                         else:
-                            commonWords[word[0]] = {'word': word[0], 'totCount': int(word[1]), 'lessons': 1}
+                            commonWords[word[0]] = {'word': word[0], 'totCount': int(word[1]), 'lessons': [lesson]}
 
-        ordered = sorted(commonWords.items(), key=lambda x: (x[1]['lessons'], x[1]['totCount']), reverse=True)
+        ordered = sorted(commonWords.items(), key=lambda x: (len(x[1]['lessons']), x[1]['totCount']), reverse=True)
         self.generateFile('commonWords', ordered)
         return ordered
 
@@ -54,13 +53,13 @@ class AggregateVideos():
                     binomi = [line.strip().split(';') for line in f]
                     for binomio in binomi:
                         binomioWord = binomio[0] + ' ' + binomio[2]
-                        if binomioWord in commonBinomi:
+                        if binomioWord in commonBinomi and lesson not in commonBinomi[binomioWord]['lessons']:
                             commonBinomi[binomioWord]['totCount'] += int(binomio[4])
-                            commonBinomi[binomioWord]['lessons'] += 1
+                            commonBinomi[binomioWord]['lessons'].append(lesson)
                         else:
-                            commonBinomi[binomioWord] = {'binomio': binomioWord, 'totCount': int(binomio[4]), 'lessons': 1}
+                            commonBinomi[binomioWord] = {'binomio': binomioWord, 'totCount': int(binomio[4]), 'lessons': [lesson]}
 
-        ordered = sorted(commonBinomi.items(), key=lambda x: (x[1]['lessons'], x[1]['totCount']), reverse=True)
+        ordered = sorted(commonBinomi.items(), key=lambda x: (len(x[1]['lessons']), x[1]['totCount']), reverse=True)
         self.generateFile('commonBionomi', ordered)
         return ordered
 
@@ -70,7 +69,7 @@ class AggregateVideos():
         commonWordsFile = open('Outputs/totalVideo/' + filename + '.csv', 'a')
         commonWordsFile.write('word' + ';' + 'in lessons' + ';' + 'tot count' + '\r\n')
         for word in words:
-            commonWordsFile.write(word[0] + ';' + str(word[1]['lessons']) + ';' + str(word[1]['totCount']) + '\r\n')
+            commonWordsFile.write(word[0] + ';' + ','.join(sorted(word[1]['lessons'], key=lambda x: int(x))) + ';' + str(word[1]['totCount']) + '\r\n')
 
     def isALesson(self, lesson):
         try:

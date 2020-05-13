@@ -9,7 +9,7 @@ from parseVideo import ParseVideo
 if __name__ == '__main__':
 
     playlistID = ''  # 'PLdrYmPSKBRMwcxumBOfPci1hFBg7Q_Nnw'  # 'PLdrYmPSKBRMzHYgtsF0efrW5dtfvg7uwM'
-    posTag = ['S', 'N', 'A']
+    posTag = ['S', 'A']
     client_secretPATH = 'YoutubeAPI/client_secret.json'
 
     Path("Outputs").mkdir(parents=True, exist_ok=True)
@@ -25,6 +25,7 @@ if __name__ == '__main__':
 
     AggregateVideos().genereteCommonWords()
     AggregateVideos().genereteCommonBinomi()
+    AggregateVideos().genereteTotalTokens()
 
 
 """

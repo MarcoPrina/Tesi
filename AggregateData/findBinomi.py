@@ -34,7 +34,7 @@ class FindBinomi():
         buffBinomi = defaultdict(int)
         for sentence in self.tokenizedCaptions['sentences']:
             for token in sentence['tokens']:
-                if first and token['pos'].startswith(tuple(posTag)):
+                if first and token['pos'].startswith('S'):
                     first = False
                     second = True
                     pre0 = token
@@ -43,8 +43,8 @@ class FindBinomi():
                     pre1 = token
                 elif token['pos'].startswith(tuple(posTag)):
                     buffBinomi[pre0['word'] + ';' + pre0['pos'] + ';' + pre1['word'] + ';' + pre1['pos'] + ';' + token['word'] + ';' + token['pos']] += 1
-                    pre0 = pre1
-                    pre1 = token
+                    first = True
+                    second = False
         self.binomi = sorted(buffBinomi.items(), key=lambda x: x[1], reverse=True)
         return self.binomi
 

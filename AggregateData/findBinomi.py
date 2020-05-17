@@ -26,7 +26,7 @@ class FindBinomi():
                         buffBinomi[lemmaBinomio]['count'] += 1
                     else:
                         buffBinomi[lemmaBinomio] = {
-                            'binomio':  binomio,
+                            'word':  binomio,
                             'pos':      pre['pos'] + ' ' + token['pos'],
                             'count': 1
                         }
@@ -63,6 +63,6 @@ class FindBinomi():
         binomiFile = open('Outputs/' + directoryName + "/" + fileName + ".csv", "a")
 
         for binomio in self.binomi:
-            binomiFile.write(binomio[0] + ';' + binomio[1]['binomio'] + ';' + binomio[1]['pos'] + ';' + str(binomio[1]['count']) + '\r\n')
+            binomiFile.write(binomio[0] + ';' + binomio[1]['word'] + ';' + binomio[1]['pos'] + ';' + str(binomio[1]['count']) + '\r\n')
 
 

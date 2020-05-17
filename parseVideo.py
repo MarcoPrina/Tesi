@@ -42,8 +42,8 @@ class ParseVideo():
         findBinomi = FindBinomi(sentencesWithToken)
         findBinomi.searchForTwo(posTag)
         findBinomi.generateFile(directoryName=self.directoryName)
-        findBinomi.searchForThree(posTag)
-        findBinomi.generateFile(directoryName=self.directoryName, fileName='trinomi')
+        #findBinomi.searchForThree(posTag)
+        #findBinomi.generateFile(directoryName=self.directoryName, fileName='trinomi')
 
         prioritize = Prioritize(sentencesWithToken)
         prioritize.getOrdered(posTag)

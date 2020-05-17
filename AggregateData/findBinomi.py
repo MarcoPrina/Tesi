@@ -13,16 +13,25 @@ class FindBinomi():
         self.binomi = []
         pre = {}
         first = True
-        buffBinomi = defaultdict(int)
+        buffBinomi = {}
         for sentence in self.tokenizedCaptions['sentences']:
             for token in sentence['tokens']:
                 if first and token['pos'].startswith('S'):
                     first = False
                     pre = token
                 elif token['pos'].startswith(tuple(posTag)):
-                    buffBinomi[pre['word'] + ';' + pre['pos'] + ';' + token['word'] + ';' + token['pos']] += 1
+                    binomio = pre['word'] + ' ' + token['word']
+                    lemmaBinomio = pre['word'][:-1] + ' ' + token['word'][:-1]
+                    if(lemmaBinomio in buffBinomi):
+                        buffBinomi[lemmaBinomio]['count'] += 1
+                    else:
+                        buffBinomi[lemmaBinomio] = {
+                            'binomio':  binomio,
+                            'pos':      pre['pos'] + ' ' + token['pos'],
+                            'count': 1
+                        }
                     first = True
-        self.binomi = sorted(buffBinomi.items(), key=lambda x: x[1], reverse=True)
+        self.binomi = sorted(buffBinomi.items(), key=lambda x: x[1]['count'], reverse=True)
         return self.binomi
 
     def searchForThree(self, posTag=['']) -> json:
@@ -53,7 +62,7 @@ class FindBinomi():
             os.remove('Outputs/' + directoryName + "/" + fileName + ".csv")
         binomiFile = open('Outputs/' + directoryName + "/" + fileName + ".csv", "a")
 
-        for binomio, count in self.binomi:
-            binomiFile.write(binomio + ';' + str(count) + '\r\n')
+        for binomio in self.binomi:
+            binomiFile.write(binomio[0] + ';' + binomio[1]['binomio'] + ';' + binomio[1]['pos'] + ';' + str(binomio[1]['count']) + '\r\n')
 
 

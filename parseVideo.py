@@ -22,8 +22,9 @@ class ParseVideo():
         CaptionDownload(credentials).get(videoID, self.directoryName)
 
         cropCaption = CropCaption(self.directoryName)
-        cropCaption.generateFile()
+
         self.usableCaption = cropCaption.getUsableCaption()
+        cropCaption.generateFile()
         return self
 
     def getCaptionFromFile(self, captionFileName: str):

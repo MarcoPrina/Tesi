@@ -16,12 +16,12 @@ class FindBinomi():
         buffBinomi = defaultdict(int)
         for sentence in self.tokenizedCaptions['sentences']:
             for token in sentence['tokens']:
-                if first and token['pos'].startswith(tuple(posTag)):
+                if first and token['pos'].startswith('S'):
                     first = False
                     pre = token
                 elif token['pos'].startswith(tuple(posTag)):
                     buffBinomi[pre['word'] + ';' + pre['pos'] + ';' + token['word'] + ';' + token['pos']] += 1
-                    pre = token
+                    first = True
         self.binomi = sorted(buffBinomi.items(), key=lambda x: x[1], reverse=True)
         return self.binomi
 

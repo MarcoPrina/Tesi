@@ -22,8 +22,9 @@ class ParseVideo():
         CaptionDownload(credentials).get(videoID, self.directoryName)
 
         cropCaption = CropCaption(self.directoryName)
-        cropCaption.generateFile()
+
         self.usableCaption = cropCaption.getUsableCaption()
+        cropCaption.generateFile()
         return self
 
     def getCaptionFromFile(self, captionFileName: str):
@@ -41,8 +42,8 @@ class ParseVideo():
         findBinomi = FindBinomi(sentencesWithToken)
         findBinomi.searchForTwo(posTag)
         findBinomi.generateFile(directoryName=self.directoryName)
-        findBinomi.searchForThree(posTag)
-        findBinomi.generateFile(directoryName=self.directoryName, fileName='trinomi')
+        #findBinomi.searchForThree(posTag)
+        #findBinomi.generateFile(directoryName=self.directoryName, fileName='trinomi')
 
         prioritize = Prioritize(sentencesWithToken)
         prioritize.getOrdered(posTag)

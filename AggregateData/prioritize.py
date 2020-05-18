@@ -10,7 +10,6 @@ class Prioritize():
         self.ordered = []
 
     def getOrdered(self, posTag=['']) -> list:
-        posTag = ['S', 'N', 'A']
         words = {}
         for sentence in self.tokenizedCaptions['sentences']:
             for token in sentence['tokens']:
@@ -20,6 +19,7 @@ class Prioritize():
                 elif token['pos'].startswith(tuple(posTag)):
                     words[token['word']] = {}
                     words[token['word']]['counter'] = 1
+                    words[token['word']]['word'] = token['word']
                     words[token['word']]['pos'] = defaultdict(int)
                     words[token['word']]['pos'][token['pos']] += 1
         self.ordered = sorted(words.items(), key=lambda x: x[1]['counter'], reverse=True)

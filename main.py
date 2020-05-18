@@ -8,7 +8,7 @@ from parseVideo import ParseVideo
 
 if __name__ == '__main__':
 
-    playlistID = ''  # 'PLdrYmPSKBRMwcxumBOfPci1hFBg7Q_Nnw'  # 'PLdrYmPSKBRMzHYgtsF0efrW5dtfvg7uwM'
+    playlistID = 'PLdrYmPSKBRMwcxumBOfPci1hFBg7Q_Nnw'  # 'PLdrYmPSKBRMwcxumBOfPci1hFBg7Q_Nnw'  # 'PLdrYmPSKBRMzHYgtsF0efrW5dtfvg7uwM'
     posTag = ['S', 'A']
     client_secretPATH = 'YoutubeAPI/client_secret.json'
 
@@ -20,12 +20,12 @@ if __name__ == '__main__':
 
         for video in playlist:
             parseVideo = ParseVideo(str(video['lesson']))
-            parseVideo.getCaptionFromID(video['videoId'], client_secretPATH).parse(posTag)
+            #parseVideo.getCaptionFromID(video['videoId'], client_secretPATH).parse(posTag)
+            parseVideo.getCaptionFromFile('Outputs/' + str(video['lesson']) + '/caption.txt').parse(posTag)
             print('Elaborata lezione ', str(video['lesson']))
 
     AggregateVideos().genereteCommonWords()
     AggregateVideos().genereteCommonBinomi()
-    AggregateVideos().genereteTotalTokens()
 
 
 """

@@ -13,17 +13,25 @@ class FindBinomi():
         self.binomi = []
         pre = {}
         first = True
-        buffBinomi = defaultdict(int)
+        buffBinomi = {}
         for sentence in self.tokenizedCaptions['sentences']:
             for token in sentence['tokens']:
-                if first and token['pos'].startswith(tuple(posTag)):
+                if first and token['pos'].startswith('S'):
                     first = False
                     pre = token
                 elif token['pos'].startswith(tuple(posTag)):
-                    #  buffBinomi[pre['word'] + ' ' + token['word']] += 1 TODO: trovare modo migliore per gestire i binomi, magari con un bel dict
-                    buffBinomi[pre['word'] + ';' + pre['pos'] + ';' + token['word'] + ';' + token['pos']] += 1
-                    pre = token
-        self.binomi = sorted(buffBinomi.items(), key=lambda x: x[1], reverse=True)
+                    binomio = pre['word'] + ' ' + token['word']
+                    lemmaBinomio = pre['word'][:-1] + ' ' + token['word'][:-1]
+                    if(lemmaBinomio in buffBinomi):
+                        buffBinomi[lemmaBinomio]['count'] += 1
+                    else:
+                        buffBinomi[lemmaBinomio] = {
+                            'word':  binomio,
+                            'pos':      pre['pos'] + ' ' + token['pos'],
+                            'count': 1
+                        }
+                    first = True
+        self.binomi = sorted(buffBinomi.items(), key=lambda x: x[1]['count'], reverse=True)
         return self.binomi
 
     def searchForThree(self, posTag=['']) -> json:
@@ -35,7 +43,7 @@ class FindBinomi():
         buffBinomi = defaultdict(int)
         for sentence in self.tokenizedCaptions['sentences']:
             for token in sentence['tokens']:
-                if first and token['pos'].startswith(tuple(posTag)):
+                if first and token['pos'].startswith('S'):
                     first = False
                     second = True
                     pre0 = token
@@ -44,8 +52,8 @@ class FindBinomi():
                     pre1 = token
                 elif token['pos'].startswith(tuple(posTag)):
                     buffBinomi[pre0['word'] + ';' + pre0['pos'] + ';' + pre1['word'] + ';' + pre1['pos'] + ';' + token['word'] + ';' + token['pos']] += 1
-                    pre0 = pre1
-                    pre1 = token
+                    first = True
+                    second = False
         self.binomi = sorted(buffBinomi.items(), key=lambda x: x[1], reverse=True)
         return self.binomi
 
@@ -54,7 +62,7 @@ class FindBinomi():
             os.remove('Outputs/' + directoryName + "/" + fileName + ".csv")
         binomiFile = open('Outputs/' + directoryName + "/" + fileName + ".csv", "a")
 
-        for binomio, count in self.binomi:
-            binomiFile.write(binomio + ';' + str(count) + '\r\n')
+        for binomio in self.binomi:
+            binomiFile.write(binomio[0] + ';' + binomio[1]['word'] + ';' + binomio[1]['pos'] + ';' + str(binomio[1]['count']) + '\r\n')
 
 

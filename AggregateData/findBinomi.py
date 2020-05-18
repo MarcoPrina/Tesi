@@ -16,10 +16,7 @@ class FindBinomi():
         buffBinomi = {}
         for sentence in self.tokenizedCaptions['sentences']:
             for token in sentence['tokens']:
-                if first and token['pos'].startswith('S'):
-                    first = False
-                    pre = token
-                elif token['pos'].startswith(tuple(posTag)):
+                if not first and token['pos'].startswith(tuple(posTag)):
                     binomio = pre['word'] + ' ' + token['word']
                     lemmaBinomio = pre['word'][:-1] + ' ' + token['word'][:-1]
                     if(lemmaBinomio in buffBinomi):
@@ -31,6 +28,10 @@ class FindBinomi():
                             'count': 1
                         }
                     first = True
+                elif first and token['pos'].startswith('S'):
+                    first = False
+                    pre = token
+
         self.binomi = sorted(buffBinomi.items(), key=lambda x: x[1]['count'], reverse=True)
         return self.binomi
 

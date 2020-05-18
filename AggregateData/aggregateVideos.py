@@ -77,7 +77,7 @@ class AggregateVideos():
         commonWordsFile = open('Outputs/totalVideo/' + filename + '.csv', 'a')
         commonWordsFile.write('word' + ';' + 'in lessons' + ';' + 'tot count' + '\r\n')
         for word in words:
-            commonWordsFile.write(word[1]['word'] + ';' + ' '.join(word[1]['lessons']) + ';' + str(word[1]['totCount']) + '\r\n')
+            commonWordsFile.write(word[1]['word'] + ';' + ' '.join(sorted(word[1]['lessons'],  key=lambda x: int(x))) + ';' + str(word[1]['totCount']) + '\r\n')
 
     def isALesson(self, lesson):
         try:

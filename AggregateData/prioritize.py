@@ -11,8 +11,10 @@ class Prioritize():
 
     def getOrdered(self, posTag=['']) -> list:
         words = {}
+        totWords = 0
         for sentence in self.tokenizedCaptions['sentences']:
             for token in sentence['tokens']:
+                totWords += 1
                 if token['word'] in words and token['pos'].startswith(tuple(posTag)):
                     words[token['word']]['counter'] += 1
                     words[token['word']]['pos'][token['pos']] += 1
@@ -22,6 +24,9 @@ class Prioritize():
                     words[token['word']]['word'] = token['word']
                     words[token['word']]['pos'] = defaultdict(int)
                     words[token['word']]['pos'][token['pos']] += 1
+
+        for word in words:
+            words[word]['tf'] = words[word]['counter'] / totWords
         self.ordered = sorted(words.items(), key=lambda x: x[1]['counter'], reverse=True)
         return self.ordered
 
@@ -30,8 +35,9 @@ class Prioritize():
             os.remove('Outputs/' + directoryName + "/" + fileName + ".csv")
         wordsFile = open('Outputs/' + directoryName + "/" + fileName + ".csv", "a")
 
+        wordsFile.write('word' + ";" + 'counter' + ";" + 'pos' + ";" + 'tf' + '\r\n')
         for word, data in self.ordered:
-            ordered = sorted(data['pos'].items(), key=lambda x: x[1], reverse=True)
-            wordsFile.write(word + ";" + str(data['counter']) + ";" + ordered[0][0] + '\r\n')
+            orderedPOS = sorted(data['pos'].items(), key=lambda x: x[1], reverse=True)
+            wordsFile.write(word + ";" + str(data['counter']) + ";" + orderedPOS[0][0] + ";" + str(data['tf']) + '\r\n')
 
         wordsFile.close()

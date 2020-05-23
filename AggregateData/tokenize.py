@@ -31,7 +31,7 @@ class Tokenize():
                     for token in sentence["tokens"]:
                         word = token['word']
                         lineParts = remainingLine.split(word, 1)
-                        if len(lineParts)>1 and lineParts[1]:
+                        if len(lineParts) > 1 and lineParts[1]:
                             remainingLine = remainingLine.split(word, 1)[1].strip()
                             if '<' in remainingLine:
                                 time = remainingLine[remainingLine.find('<')+1:].split('>', 1)[0]

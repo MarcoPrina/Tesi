@@ -16,7 +16,7 @@ class ParseVideo():
         self.usableCaption = ''
         Path('Outputs/' + self.directoryName).mkdir(parents=True, exist_ok=True)
 
-    def getCaptionFromID(self, videoID:str, client_secretPATH: str):
+    def getCaptionFromID(self, videoID: str, client_secretPATH: str):
         credentials = YoutubeCredentials(client_secretPATH).get()
 
         CaptionDownload(credentials).get(videoID, self.directoryName)
@@ -32,8 +32,33 @@ class ParseVideo():
         self.usableCaption = captionFile.read()
         return self
 
-
     def parse(self, posTag=['']):
+        tokenizer = Tokenize(self.usableCaption)
+        sentencesWithToken = tokenizer.getTokens()
+        tokenizer.generateFile(directoryName=self.directoryName)
+
+        findBinomi = FindBinomi(sentencesWithToken)
+        findBinomi.searchForTwo(posTag)
+        findBinomi.generateFile(directoryName=self.directoryName)
+        # findBinomi.searchForThree(posTag)
+        # findBinomi.generateFile(directoryName=self.directoryName, fileName='trinomi')
+
+        prioritize = Prioritize(sentencesWithToken)
+        prioritize.getOrdered(posTag)
+        prioritize.generateFile(directoryName=self.directoryName)
+
+        breakAnalyzer = BreakAnalyzer(sentencesWithToken)
+        breakAnalyzer.getBreaks()
+        breakAnalyzer.generateFile(directoryName=self.directoryName)
+
+    def parseFromTokenFile(self, lesson, posTag=['']): #TODO: rifare come fa i token in modo umano
+        sentencesWithToken = { 'sentences': []}
+        with open('Outputs/' + lesson + '/token.csv') as f:
+            next(f)
+            tokens = [line.strip().split(';') for line in f]
+            #for token in tokens:
+                #sentencesWithToken['sentences'].append({'tokens':})
+
 
         tokenizer = Tokenize(self.usableCaption)
         sentencesWithToken = tokenizer.getTokens()
@@ -42,8 +67,8 @@ class ParseVideo():
         findBinomi = FindBinomi(sentencesWithToken)
         findBinomi.searchForTwo(posTag)
         findBinomi.generateFile(directoryName=self.directoryName)
-        #findBinomi.searchForThree(posTag)
-        #findBinomi.generateFile(directoryName=self.directoryName, fileName='trinomi')
+        # findBinomi.searchForThree(posTag)
+        # findBinomi.generateFile(directoryName=self.directoryName, fileName='trinomi')
 
         prioritize = Prioritize(sentencesWithToken)
         prioritize.getOrdered(posTag)

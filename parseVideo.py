@@ -51,18 +51,17 @@ class ParseVideo():
         breakAnalyzer.getBreaks()
         breakAnalyzer.generateFile(directoryName=self.directoryName)
 
-    def parseFromTokenFile(self, lesson, posTag=['']): #TODO: rifare come fa i token in modo umano
-        sentencesWithToken = { 'sentences': []}
+    def parseFromTokenFile(self, lesson, posTag=['']):
+        sentencesWithToken = []
         with open('Outputs/' + lesson + '/token.csv') as f:
             next(f)
-            tokens = [line.strip().split(';') for line in f]
-            #for token in tokens:
-                #sentencesWithToken['sentences'].append({'tokens':})
-
-
-        tokenizer = Tokenize(self.usableCaption)
-        sentencesWithToken = tokenizer.getTokens()
-        tokenizer.generateFile(directoryName=self.directoryName)
+            token = [line.strip().split(';') for line in f]
+            for data in token:
+                sentencesWithToken.append({
+                    'word': data[0],
+                    'time': data[1],
+                    'pos': data[2],
+                })
 
         findBinomi = FindBinomi(sentencesWithToken)
         findBinomi.searchForTwo(posTag)

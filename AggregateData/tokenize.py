@@ -19,13 +19,12 @@ class Tokenize():
     def getTokens(self) -> json:
         self.startTint()
         file = self.usableCaption.split('\r')
-        tokenized = { "sentences": []}
+        tokenized = []
         with tqdm(total=len(file)) as pbar:
-            for index, line in enumerate(file):
+            for line in file:
                 pbar.update(1)
                 if line:
                     sentence = self.posLine(line)["sentences"][0]
-                    sentence['index'] = index
                     remainingLine = line
                     time = ''
                     for token in sentence["tokens"]:
@@ -36,7 +35,7 @@ class Tokenize():
                             if '<' in remainingLine:
                                 time = remainingLine[remainingLine.find('<')+1:].split('>', 1)[0]
                         token['time'] = time
-                    tokenized["sentences"].append(sentence)
+                        tokenized.append(token)
 
         self.sentencesWithToken = tokenized
         return tokenized
@@ -64,9 +63,8 @@ class Tokenize():
         if os.path.exists('Outputs/' + directoryName + "/" + fileName +".csv"):
             os.remove('Outputs/' + directoryName + "/" + fileName +".csv")
         tokenFile = open('Outputs/' + directoryName + "/" + fileName +".csv", "a")
-        for sentence in self.sentencesWithToken['sentences']:
-            for token in sentence['tokens']:
-                tokenFile.write(token['word'] + ';' + token['time'] + ';' + token['pos'] + '\r\n')
+        for token in self.sentencesWithToken:
+            tokenFile.write(token['word'] + ';' + token['time'] + ';' + token['pos'] + '\r\n')
         tokenFile.close()
 
 

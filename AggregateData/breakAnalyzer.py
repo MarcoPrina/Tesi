@@ -6,7 +6,7 @@ from datetime import datetime
 
 class BreakAnalyzer():
 
-    def __init__(self, tokenizedCaptions: json) -> None:
+    def __init__(self, tokenizedCaptions: []) -> None:
         self.tokenizedCaptions = tokenizedCaptions
         self.timePattern = '%H:%M:%S.%f'
         self.orderedBreaks = []
@@ -15,17 +15,16 @@ class BreakAnalyzer():
         pre = {}
         first = True
         breaks = []
-        for sentence in self.tokenizedCaptions['sentences']:
-            for token in sentence['tokens']:
-                if first:
-                    first = False
-                    pre = token
-                else:
-                    start = datetime.strptime(pre['time'], self.timePattern)
-                    end = datetime.strptime(token['time'], self.timePattern)
-                    timeBreak = end - start
-                    breaks.append({'break': timeBreak.__str__(), 'start': pre['time']})
-                    pre = token
+        for token in self.tokenizedCaptions:
+            if first:
+                first = False
+                pre = token
+            else:
+                start = datetime.strptime(pre['time'], self.timePattern)
+                end = datetime.strptime(token['time'], self.timePattern)
+                timeBreak = end - start
+                breaks.append({'break': timeBreak.__str__(), 'start': pre['time']})
+                pre = token
 
         self.orderedBreaks = sorted(breaks, key=lambda x: x['break'], reverse=True)
         return self.orderedBreaks

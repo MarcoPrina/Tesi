@@ -5,7 +5,7 @@ from collections import defaultdict
 
 class FindBinomi():
 
-    def __init__(self, tokenizedCaptions: json) -> None:
+    def __init__(self, tokenizedCaptions: []) -> None:
         self.binomi = []
         self.tokenizedCaptions = tokenizedCaptions
 
@@ -15,24 +15,23 @@ class FindBinomi():
         first = True
         buffBinomi = {}
         totBinomi = 0
-        for sentence in self.tokenizedCaptions['sentences']:
-            for token in sentence['tokens']:
-                totBinomi += 1
-                if not first and token['pos'].startswith(tuple(posTag)):
-                    binomio = pre['word'] + ' ' + token['word']
-                    lemmaBinomio = pre['word'][:-1] + ' ' + token['word'][:-1]
-                    if(lemmaBinomio in buffBinomi):
-                        buffBinomi[lemmaBinomio]['count'] += 1
-                    else:
-                        buffBinomi[lemmaBinomio] = {
-                            'word':  binomio,
-                            'pos':      pre['pos'] + ' ' + token['pos'],
-                            'count': 1
-                        }
-                    first = True
-                elif first and token['pos'].startswith('S'):
-                    first = False
-                    pre = token
+        for token in self.tokenizedCaptions:
+            totBinomi += 1
+            if not first and token['pos'].startswith(tuple(posTag)):
+                binomio = pre['word'] + ' ' + token['word']
+                lemmaBinomio = pre['word'][:-1] + ' ' + token['word'][:-1]
+                if(lemmaBinomio in buffBinomi):
+                    buffBinomi[lemmaBinomio]['count'] += 1
+                else:
+                    buffBinomi[lemmaBinomio] = {
+                        'word':  binomio,
+                        'pos':      pre['pos'] + ' ' + token['pos'],
+                        'count': 1
+                    }
+                first = True
+            elif first and token['pos'].startswith('S'):
+                first = False
+                pre = token
 
         for binomio in buffBinomi:
             buffBinomi[binomio]['tf'] = buffBinomi[binomio]['count']/totBinomi

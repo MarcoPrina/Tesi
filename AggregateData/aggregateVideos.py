@@ -28,10 +28,12 @@ class AggregateVideos():
     def genereteCommonWords(self):
         lessons = os.listdir('Outputs')
 
+        totLesson = 0
         commonWords = {}
 
         for lesson in lessons:
             if self.isALesson(lesson):
+                totLesson += 1
                 with open('Outputs/' + lesson + '/words.csv') as f:
                     next(f)
                     words = [line.split(';') for line in f]
@@ -39,11 +41,13 @@ class AggregateVideos():
                         if word[0] in commonWords:
                             commonWords[word[0]]['totCount'] += int(word[1])
                             commonWords[word[0]]['lessons'].append(lesson)
+                            commonWords[word[0]]['tf-idf'][lesson] = float(word[3])
                         else:
                             commonWords[word[0]] = {
                                 'word': word[0],
                                 'totCount': int(word[1]),
-                                'lessons': [lesson]
+                                'lessons': [lesson],
+                                'tf-idf': {lesson: float(word[3])}
                             }
 
         ordered = sorted(commonWords.items(), key=lambda x: (len(x[1]['lessons']), x[1]['totCount']), reverse=True)
@@ -90,13 +94,18 @@ class AggregateVideos():
         commonWordsFile = open('Outputs/totalVideo/' + filename + '.csv', 'a')
         commonWordsFile.write('word' + ';' + 'in lessons' + ';' + 'tot count' + ';' + 'tf-idf' + '\r\n')
         for word in words:
+            sortTfIdf = sorted(word[1]['tf-idf'].items(), key=lambda x: x[1], reverse=True)
+            tfIdf = ''
+            for lesson in sortTfIdf:
+                tfIdf += str(lesson[0]) + ' ' + str(lesson[1]) + ';'
             commonWordsFile.write(
                 word[1]['word'] +
                 ';' +
                 ' '.join(sorted(word[1]['lessons'], key=lambda x: int(x))) +
                 ';' +
                 str(word[1]['totCount']) +
-                ' '.join(sorted(word[1]['tf-idf'], key=lambda x: float(x))) + #TODO: finire che non ne posso più
+                ';' +
+                tfIdf +
                 '\r\n')
 
     def isALesson(self, lesson):

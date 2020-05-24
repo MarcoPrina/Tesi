@@ -8,7 +8,7 @@ from parseVideo import ParseVideo
 
 if __name__ == '__main__':
 
-    playlistID = 'PLdrYmPSKBRMwcxumBOfPci1hFBg7Q_Nnw'  # 'PLdrYmPSKBRMwcxumBOfPci1hFBg7Q_Nnw'  # 'PLdrYmPSKBRMzHYgtsF0efrW5dtfvg7uwM'
+    playlistID = ''  # 'PLdrYmPSKBRMwcxumBOfPci1hFBg7Q_Nnw'  # 'PLdrYmPSKBRMzHYgtsF0efrW5dtfvg7uwM'
     posTag = ['S', 'A']
     client_secretPATH = 'YoutubeAPI/client_secret.json'
 

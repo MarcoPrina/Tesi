@@ -23,13 +23,16 @@ class LDA():
         self.dictionary = corpora.Dictionary(ldaTokens)
         self.corpus = [self.dictionary.doc2bow(text) for text in ldaTokens]
 
-        self.ldamodel = gensim.models.ldamodel.LdaModel(self.corpus, num_topics=nTopic, id2word=self.dictionary, passes=15)
+        # self.ldamodel = gensim.models.ldamodel.LdaModel(self.corpus, num_topics=nTopic, id2word=self.dictionary, passes=15)
+
+        mallet_path = 'mallet-2.0.8/mallet-2.0.8/bin/mallet'
+        self.ldamodel = gensim.models.wrappers.LdaMallet(mallet_path, corpus=self.corpus , num_topics=20, id2word=self.dictionary)
+
         self.ldamodel.save('model5.gensim')
-        topics = self.ldamodel.print_topics(num_words=4)
 
         # Compute Perplexity
-        print('\nPerplexity: ',
-              self.ldamodel.log_perplexity(self.corpus))  # a measure of how good the model is. lower the better.
+        #print('\nPerplexity: ',
+         #     self.ldamodel.log_perplexity(self.corpus))  # a measure of how good the model is. lower the better.
 
         # Compute Coherence Score
         coherence_model_lda = CoherenceModel(model=self.ldamodel, texts=ldaTokens, coherence='c_v')

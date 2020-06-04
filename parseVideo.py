@@ -3,6 +3,7 @@ from pathlib import Path
 from AggregateData.breakAnalyzer import BreakAnalyzer
 from AggregateData.cropCaption import CropCaption
 from AggregateData.findBinomi import FindBinomi
+from AggregateData.lda import LDA
 from AggregateData.prioritize import Prioritize
 from AggregateData.tokenize import Tokenize
 from YoutubeAPI.captionDownload import CaptionDownload
@@ -32,28 +33,16 @@ class ParseVideo():
         self.usableCaption = captionFile.read()
         return self
 
-    def parse(self, posTag=['']):
+    def parseFromCaption(self, posTag=['']):
         tokenizer = Tokenize(self.usableCaption)
         sentencesWithToken = tokenizer.getTokens()
         tokenizer.generateFile(directoryName=self.directoryName)
 
-        findBinomi = FindBinomi(sentencesWithToken)
-        findBinomi.searchForTwo(posTag)
-        findBinomi.generateFile(directoryName=self.directoryName)
-        # findBinomi.searchForThree(posTag)
-        # findBinomi.generateFile(directoryName=self.directoryName, fileName='trinomi')
+        self.parse(posTag, sentencesWithToken)
 
-        prioritize = Prioritize(sentencesWithToken)
-        prioritize.getOrdered(posTag)
-        prioritize.generateFile(directoryName=self.directoryName)
-
-        breakAnalyzer = BreakAnalyzer(sentencesWithToken)
-        breakAnalyzer.getBreaks()
-        breakAnalyzer.generateFile(directoryName=self.directoryName)
-
-    def parseFromTokenFile(self, lesson, posTag=['']):
+    def parseFromTokenFile(self, posTag=['']):
         sentencesWithToken = []
-        with open('Outputs/' + lesson + '/token.csv') as f:
+        with open('Outputs/' + self.directoryName + '/token.csv') as f:
             next(f)
             token = [line.strip().split(';') for line in f]
             for data in token:
@@ -63,11 +52,13 @@ class ParseVideo():
                     'pos': data[2],
                 })
 
+        self.parse(posTag, sentencesWithToken)
+
+    def parse(self, posTag, sentencesWithToken):
+
         findBinomi = FindBinomi(sentencesWithToken)
         findBinomi.searchForTwo(posTag)
         findBinomi.generateFile(directoryName=self.directoryName)
-        # findBinomi.searchForThree(posTag)
-        # findBinomi.generateFile(directoryName=self.directoryName, fileName='trinomi')
 
         prioritize = Prioritize(sentencesWithToken)
         prioritize.getOrdered(posTag)
@@ -76,3 +67,8 @@ class ParseVideo():
         breakAnalyzer = BreakAnalyzer(sentencesWithToken)
         breakAnalyzer.getBreaks()
         breakAnalyzer.generateFile(directoryName=self.directoryName)
+
+        lda = LDA()
+        lda.findTopic(sentencesWithToken, posTag=posTag, nTopic=4)
+        lda.generateFile(directoryName=self.directoryName)
+        lda.display()

@@ -14,7 +14,8 @@ if __name__ == '__main__':
     client_secretPATH = 'YoutubeAPI/client_secret.json'
 
     Path("Outputs").mkdir(parents=True, exist_ok=True)
-    # ParseVideo('1').getCaptionFromFile('Outputs/' + '1' + '/caption.txt').parse(posTag)
+    # ParseVideo('1').getCaptionFromFile('Outputs/' + '1' + '/caption.txt').parseFromCaption(posTag)
+    ParseVideo('2').parseFromTokenFile(posTag)
 
     if playlistID:
         credential = YoutubeCredentials(client_secretPATH).get()
@@ -22,14 +23,14 @@ if __name__ == '__main__':
 
         for video in playlist:
             parseVideo = ParseVideo(str(video['lesson']))
-            # parseVideo.getCaptionFromID(video['videoId'], client_secretPATH).parse(posTag)
-            parseVideo.getCaptionFromFile('Outputs/' + str(video['lesson']) + '/caption.txt').parse(posTag)
-            # parseVideo.parseFromTokenFile(str(video['lesson']), posTag)
+            # parseVideo.getCaptionFromID(video['videoId'], client_secretPATH).parseFromCaption(posTag)
+            # parseVideo.getCaptionFromFile('Outputs/' + str(video['lesson']) + '/caption.txt').parseFromCaption(posTag)
+            parseVideo.parseFromTokenFile(posTag)
             print('Elaborata lezione ', str(video['lesson']))
 
-    # AggregateVideos().genereteCommonWords()
+    AggregateVideos().genereteCommonWords()
     # AggregateVideos().genereteCommonBinomi()
-
+'''
     sentencesWithToken = []
     with open('Outputs/1/token.csv') as f:
         next(f)
@@ -37,10 +38,9 @@ if __name__ == '__main__':
         for data in token:
             if data[2].startswith(tuple(posTag)):
                 sentencesWithToken.append(data[0][:-1])
+                '''
 
-    lda = LDA()
-    lda.findTopic([d.split() for d in sentencesWithToken], nTopic=5)
-    lda.display()
+
 
 """
     videoID = "THNwJlawXic"

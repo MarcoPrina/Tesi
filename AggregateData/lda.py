@@ -14,7 +14,7 @@ class LDA():
         for num, token in enumerate(tokens):
             if token['pos'].startswith(tuple(posTag)) and len(token['word']) > 2:
                 buffTokens.append(token['word'][:-1])
-            if num % 20 == 0:
+            if num % 1 == 0:
                 ldaTokens.append(buffTokens)
                 buffTokens = []
 
@@ -26,9 +26,9 @@ class LDA():
         # self.ldamodel = gensim.models.ldamodel.LdaModel(self.corpus, num_topics=nTopic, id2word=self.dictionary, passes=15)
 
         mallet_path = 'mallet-2.0.8/mallet-2.0.8/bin/mallet'
-        self.ldamodel = gensim.models.wrappers.LdaMallet(mallet_path, corpus=self.corpus , num_topics=20, id2word=self.dictionary)
+        self.ldamodel = gensim.models.wrappers.LdaMallet(mallet_path, corpus=self.corpus , num_topics=nTopic, id2word=self.dictionary)
 
-        self.ldamodel.save('model5.gensim')
+        # self.ldamodel.save('model5.gensim')
 
         # Compute Perplexity
         #print('\nPerplexity: ',
@@ -51,7 +51,7 @@ class LDA():
             os.remove('Outputs/' + directoryName + "/" + fileName + ".csv")
         ldaFile = open('Outputs/' + directoryName + "/" + fileName + ".csv", "a")
 
-        topics = self.ldamodel.print_topics(num_words=4)
+        topics = self.ldamodel.print_topics(num_words=10)
         for topic in topics:
             ldaFile.write(topic[1].replace(" + ", ";") + '\r\n')
         ldaFile.close()

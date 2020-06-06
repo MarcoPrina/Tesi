@@ -69,6 +69,6 @@ class ParseVideo():
         breakAnalyzer.generateFile(directoryName=self.directoryName)
 
         lda = LDA()
-        lda.findTopic(sentencesWithToken, posTag=posTag, nTopic=4)
+        lda.findTopic(sentencesWithToken, posTag=posTag, nTopic=8)
         lda.generateFile(directoryName=self.directoryName)
-        lda.display()
+        #lda.display()

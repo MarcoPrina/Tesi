@@ -8,6 +8,8 @@ from AggregateData.prioritize import Prioritize
 from AggregateData.tokenize import Tokenize
 from YoutubeAPI.captionDownload import CaptionDownload
 from YoutubeAPI.credentials import YoutubeCredentials
+from YoutubeAPI.speech2text import Speech2Text
+from YoutubeAPI.video2audio import Video2audio
 
 
 class ParseVideo():
@@ -16,6 +18,14 @@ class ParseVideo():
         self.directoryName = directoryName
         self.usableCaption = ''
         Path('Outputs/' + self.directoryName).mkdir(parents=True, exist_ok=True)
+
+    def getCaptionFromVideo(self, videoName: str, pathCredentials: str):
+        speech = Speech2Text(pathCredentials)
+        # Video2audio().processVideo(videoName)
+        audioName = videoName + '.flac'
+        # speech.upload_blob(audioName)
+        speech.sample_long_running_recognize(audioName)
+        speech
 
     def getCaptionFromID(self, videoID: str, client_secretPATH: str):
         credentials = YoutubeCredentials(client_secretPATH).get()
@@ -53,6 +63,7 @@ class ParseVideo():
                 })
 
         self.parse(posTag, sentencesWithToken)
+
 
     def parse(self, posTag, sentencesWithToken):
 

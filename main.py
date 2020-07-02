@@ -7,12 +7,12 @@ from AggregateData.parseVideo import ParseVideo
 
 if __name__ == '__main__':
 
-    playlistID = 'PLdrYmPSKBRMzHYgtsF0efrW5dtfvg7uwM'  # 'PLdrYmPSKBRMwcxumBOfPci1hFBg7Q_Nnw'  # 'PLdrYmPSKBRMzHYgtsF0efrW5dtfvg7uwM'
+    playlistID = ''  # 'PLdrYmPSKBRMwcxumBOfPci1hFBg7Q_Nnw'  # 'PLdrYmPSKBRMzHYgtsF0efrW5dtfvg7uwM'
     posTag = ['S', 'A']
     client_secretPATH = 'YoutubeAPI/client_secret.json'
 
     Path("Outputs").mkdir(parents=True, exist_ok=True)
-    # ParseVideo('1').getCaptionFromFile('Outputs/' + '1' + '/caption.txt').parseFromCaption(posTag)
+    ParseVideo('1').getCaptionFromFile('Outputs/' + '1' + '/caption.txt').parseFromCaption(posTag)
     # ParseVideo('2').parseFromTokenFile(posTag)
 
     if playlistID:
@@ -26,7 +26,7 @@ if __name__ == '__main__':
             parseVideo.parseFromTokenFile(posTag)
             print('Elaborata lezione ', str(video['lesson']))
 
-    AggregateVideos().genereteCommonWords()
+    # AggregateVideos().genereteCommonWords()
     # AggregateVideos().genereteCommonBinomi()
 '''
     sentencesWithToken = []

@@ -1,5 +1,7 @@
 Installare tutte le dipendenze:
-pip install -r requirements.txt
+pip install -r requirements.txt7
+pip install --upgrade google-cloud-storage
+
 Se da come errore 'Error: pg_config executable not found.' allora bisogna:
 sudo apt-get install libpq-dev
 pip install psycopg2
@@ -21,7 +23,7 @@ Si possono specificare i tag grammaticali di intesse specificandoli in 'posTag',
 tutti i tag possibili.
 Non è necessario specificare postTag nelle funzioni, se verrà omesso userà tutti i tag come default.
 La lista completa dei tag utilizzabili la si può trovare a 'http://medialab.di.unipi.it/wiki/POS_and_morphology'
-Si possono uasre tag diversi per le diverse funzioni, basta specificarli separatamente
+Si possono usare tag diversi per le diverse funzioni, basta specificarli separatamente
 
 Tutti i file generati verranno salvati nella cartella Outputs, sono tutti nel formato csv e come separatore si è usato
 il punto e virgola ;

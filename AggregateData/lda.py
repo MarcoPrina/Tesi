@@ -14,7 +14,7 @@ class LDA():
         for num, token in enumerate(tokens):
             if token['pos'].startswith(tuple(posTag)) and len(token['word']) > 2:
                 buffTokens.append(token['word'][:-1])
-            if num % 1 == 0:
+            if '.' in token['word']:
                 ldaTokens.append(buffTokens)
                 buffTokens = []
 

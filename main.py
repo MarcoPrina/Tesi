@@ -12,8 +12,9 @@ if __name__ == '__main__':
     client_secretPATH = 'YoutubeAPI/client_secret.json'
 
     Path("Outputs").mkdir(parents=True, exist_ok=True)
-    ParseVideo('1').getCaptionFromFile('Outputs/' + '1' + '/caption.txt').parseFromCaption(posTag)
+    # ParseVideo('2').getCaptionFromFile('Outputs/' + '2' + '/caption.txt').parseFromCaption(posTag)
     # ParseVideo('2').parseFromTokenFile(posTag)
+    ParseVideo('12').getCaptionFromVideo('lezione12.mp4', 'YoutubeAPI/credentials.json').parseFromCaption(posTag)
 
     if playlistID:
         credential = YoutubeCredentials(client_secretPATH).get()

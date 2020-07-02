@@ -25,7 +25,8 @@ class ParseVideo():
         audioName = videoName + '.flac'
         # speech.upload_blob(audioName)
         speech.sample_long_running_recognize(audioName)
-        speech
+        self.usableCaption = speech.generateFile(self.directoryName)
+        return self
 
     def getCaptionFromID(self, videoID: str, client_secretPATH: str):
         credentials = YoutubeCredentials(client_secretPATH).get()

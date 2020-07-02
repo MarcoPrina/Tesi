@@ -4,14 +4,16 @@ import os
 from google.cloud import speech_v1p1beta1
 from google.cloud import storage
 
+# bucket_name = 'audio-lezioni'
+bucket_name = 'testinadimaiale'
 
-bucket_name = 'audio-lezioni'
 
 class Speech2Text():
 
     def __init__(self, pathCredential: str) -> None:
         self.speech_client = speech_v1p1beta1.SpeechClient.from_service_account_json(pathCredential)
         self.storage_client = storage.Client.from_service_account_json(pathCredential)
+        self.result = {}
 
     def create_bucket(self):
         """Creates a new bucket."""
@@ -65,20 +67,19 @@ class Speech2Text():
         response = operation.result()
 
         # The first result includes start and end time word offsets
-        resultbuff = response.results  # TODO: controllare se ne torna più di uno
-        self.generateFile(resultbuff)
-        return resultbuff
+        self.result = response.results
+        return self.result
 
-    def generateFile(self, result):
-        if os.path.exists('caption.txt'):
-            os.remove('caption.txt')
-        captionFile = open('caption.txt', 'a')
+    def generateFile(self, directoryName):
+        if os.path.exists(directoryName + '/caption.txt'):
+            os.remove(directoryName + '/caption.txt')
+        captionFile = open(directoryName + '/caption.txt', 'a')
 
-        if os.path.exists('text.txt'):
-            os.remove('text.txt')
-        textFile = open('text.txt', 'a')
+        if os.path.exists(directoryName + '/text.txt'):
+            os.remove(directoryName + '/text.txt')
+        textFile = open(directoryName + '/text.txt', 'a')
 
-        for sentence in result:
+        for sentence in self.result:
             alternative = sentence.alternatives[0]
             for word in alternative.words:
                 if word.start_time.nanos:
@@ -94,3 +95,6 @@ class Speech2Text():
                 textFile.write(word.word + ' ')
             captionFile.write('\r\n')
             textFile.write('\r\n')
+
+        captionFile = open(directoryName + '/caption.txt', 'r')
+        return captionFile.read()

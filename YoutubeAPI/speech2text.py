@@ -71,13 +71,13 @@ class Speech2Text():
         return self.result
 
     def generateFile(self, directoryName):
-        if os.path.exists(directoryName + '/caption.txt'):
-            os.remove(directoryName + '/caption.txt')
-        captionFile = open(directoryName + '/caption.txt', 'a')
+        if os.path.exists('Outputs/' + directoryName + '/caption.txt'):
+            os.remove('Outputs/' + directoryName + '/caption.txt')
+        captionFile = open('Outputs/' + directoryName + '/caption.txt', 'a')
 
-        if os.path.exists(directoryName + '/text.txt'):
-            os.remove(directoryName + '/text.txt')
-        textFile = open(directoryName + '/text.txt', 'a')
+        if os.path.exists('Outputs/' + directoryName + '/text.txt'):
+            os.remove('Outputs/' + directoryName + '/text.txt')
+        textFile = open('Outputs/' + directoryName + '/text.txt', 'a')
 
         for sentence in self.result:
             alternative = sentence.alternatives[0]
@@ -96,5 +96,5 @@ class Speech2Text():
             captionFile.write('\r\n')
             textFile.write('\r\n')
 
-        captionFile = open(directoryName + '/caption.txt', 'r')
+        captionFile = open('Outputs/' + directoryName + '/caption.txt', 'r')
         return captionFile.read()

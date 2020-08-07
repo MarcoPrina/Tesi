@@ -21,9 +21,9 @@ class ParseVideo():
 
     def getCaptionFromVideo(self, videoName: str, pathCredentials: str):
         speech = Speech2Text(pathCredentials)
-        # Video2audio().processVideo(videoName)
+        Video2audio().processVideo(videoName)
         audioName = videoName + '.flac'
-        # speech.upload_blob(audioName)
+        speech.upload_blob(audioName)
         speech.sample_long_running_recognize(audioName)
         self.usableCaption = speech.generateFile(self.directoryName)
         return self
